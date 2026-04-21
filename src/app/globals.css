@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* ========================
+   THEME VARIABLES
+======================== */
+:root {
+  --color-primary:      #C8446B;
+  --color-primary-dark: #b03560;
+  --color-gold:         #C9A96E;
+  --color-dark:         #1A1A2E;
+  --color-darker:       #0F0F1E;
+  --color-cream:        #FDF6F0;
+  --color-text:         #2D2D2D;
+
+  /* ✅ UPDATED FONTS */
+  --font-heading: var(--font-heading);
+  --font-body:    var(--font-body);
+}
+
+/* ========================
+   BASE STYLES
+======================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), serif;
+    letter-spacing: 0.02em;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0F0F1E;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #C8446B40;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #C8446B80;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: #C8446B33;
+    color: #fff;
+  }
+}
+
+/* ========================
+   UTILITIES
+======================== */
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading), serif;
+  }
+
+  .font-sans {
+    font-family: var(--font-body), system-ui, sans-serif;
+  }
+}
