@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 
 /* ─────────────────────────────────────────
    TESTIMONIALS DATA
-   Replace with real client reviews
 ───────────────────────────────────────── */
 const TESTIMONIALS = [
   {
@@ -64,9 +63,7 @@ function useScrollReveal(threshold = 0.15) {
     const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
-      },
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
       { threshold }
     );
     observer.observe(el);
@@ -140,17 +137,14 @@ export default function Testimonials() {
     );
   }, [active, goTo]);
 
-  /* Auto-advance every 5s */
   useEffect(() => {
     autoRef.current = setInterval(next, 5000);
     return () => { if (autoRef.current) clearInterval(autoRef.current); };
   }, [next]);
 
-  /* Pause auto on hover */
   const pauseAuto = () => { if (autoRef.current) clearInterval(autoRef.current); };
   const resumeAuto = () => { autoRef.current = setInterval(next, 5000); };
 
-  /* Touch / drag swipe */
   const onDragStart = (x: number) => { setDragging(true); setDragStartX(x); pauseAuto(); };
   const onDragEnd = (x: number) => {
     if (!dragging) return;
@@ -167,17 +161,14 @@ export default function Testimonials() {
   return (
     <section className="relative bg-[#1A1A2E] py-24 sm:py-32 overflow-hidden">
 
-      {/* ── Background ── */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8446B]/30 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A96E]/20 to-transparent" />
       <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#C8446B]/[0.04] blur-3xl pointer-events-none" />
 
-      {/* Large decorative quote mark */}
-      
+    
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* ── Header ── */}
         <div
           ref={headerRef}
           className={`text-center mb-16 transition-all duration-700 ease-out ${
@@ -200,9 +191,8 @@ export default function Testimonials() {
           </p>
         </div>
 
-        {/* ── Desktop: 3-card carousel ── */}
+        {/* Desktop 3-card */}
         <div
-          ref={cardsRef}
           className={`hidden md:block transition-all duration-700 ease-out ${
             cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
@@ -210,7 +200,6 @@ export default function Testimonials() {
           onMouseLeave={resumeAuto}
         >
           <div className="grid grid-cols-3 gap-5 items-center">
-            {/* Left — dimmed */}
             <TestimonialCard
               testimonial={featuredLeft}
               state="side"
@@ -219,14 +208,12 @@ export default function Testimonials() {
                 'right'
               )}
             />
-            {/* Center — highlighted */}
             <TestimonialCard
               testimonial={featuredCenter}
               state="center"
               animating={animating}
               animDir={animDir}
             />
-            {/* Right — dimmed */}
             <TestimonialCard
               testimonial={featuredRight}
               state="side"
@@ -235,9 +222,10 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* ── Mobile: single card swipeable ── */}
+        {/* Mobile single card — FIXED WITH min-h AND flex */}
         <div
-          className={`md:hidden transition-all duration-700 ease-out ${
+          ref={cardsRef}
+          className={`md:hidden min-h-[420px] flex items-center justify-center transition-all duration-700 ease-out ${
             cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
           onTouchStart={(e) => onDragStart(e.touches[0].clientX)}
@@ -245,17 +233,18 @@ export default function Testimonials() {
           onMouseDown={(e) => onDragStart(e.clientX)}
           onMouseUp={(e) => onDragEnd(e.clientX)}
         >
-          <TestimonialCard
-            testimonial={featuredCenter}
-            state="center"
-            animating={animating}
-            animDir={animDir}
-          />
+          <div className="w-full">
+            <TestimonialCard
+              testimonial={featuredCenter}
+              state="center"
+              animating={animating}
+              animDir={animDir}
+            />
+          </div>
         </div>
 
-        {/* ── Controls ── */}
+        {/* Controls */}
         <div className="mt-10 flex items-center justify-center gap-6">
-          {/* Prev */}
           <button
             onClick={prev}
             aria-label="Previous testimonial"
@@ -266,7 +255,6 @@ export default function Testimonials() {
             </svg>
           </button>
 
-          {/* Dot indicators */}
           <div className="flex items-center gap-2">
             {TESTIMONIALS.map((_, i) => (
               <button
@@ -282,7 +270,6 @@ export default function Testimonials() {
             ))}
           </div>
 
-          {/* Next */}
           <button
             onClick={next}
             aria-label="Next testimonial"
@@ -294,8 +281,15 @@ export default function Testimonials() {
           </button>
         </div>
 
-        {/* ── Overall rating strip ── */}
+        <div
+          className={`mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10 transition-all duration-700 delay-300 ease-out ${
+            cardsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`}
+        >
         
+         
+          
+        </div>
       </div>
     </section>
   );
@@ -335,22 +329,17 @@ function TestimonialCard({
         }
       `}
     >
-      {/* Quote mark */}
       <div className="font-heading text-5xl text-[#C8446B]/20 leading-none select-none -mb-2">
         "
       </div>
 
-      {/* Review text */}
       <p className={`leading-relaxed ${isCenter ? 'text-white/80 text-base' : 'text-white/50 text-sm'}`}>
         {testimonial.review}
       </p>
 
-      {/* Stars */}
       <Stars count={testimonial.rating} />
 
-      {/* Author */}
       <div className="flex items-center gap-3 mt-auto pt-2 border-t border-white/[0.06]">
-        {/* Avatar initial */}
         <div className={`w-10 h-10 rounded-full flex items-center justify-center font-heading font-bold text-sm shrink-0 ${
           isCenter
             ? 'bg-gradient-to-br from-[#C8446B] to-[#C9A96E] text-white'
@@ -368,7 +357,6 @@ function TestimonialCard({
         </div>
       </div>
 
-      {/* Active center glow */}
       {isCenter && (
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-[#C8446B]/10 to-transparent pointer-events-none" />
       )}
